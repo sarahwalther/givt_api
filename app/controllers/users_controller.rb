@@ -1,5 +1,6 @@
 class UsersController < ApplicationController
   before_action :set_user, only: [:show, :update, :destroy]
+  before_action :authenticate, only: [:index, :show, :update, :destroy]
 
   # GET /users
   def index
@@ -15,6 +16,17 @@ class UsersController < ApplicationController
 
   # POST /users
   def create
+    # user = User.find_by_email(params[:email])
+    # # If the user exists AND the password entered is correct.
+    # if user && user.authenticate(params[:password])
+    #   # Save the user id inside the browser cookie. This is how we keep the user
+    #   # logged in when they navigate around our website.
+    #   session[:user_id] = user.id
+    #   redirect_to '/'
+    # else
+    # # If user's login doesn't work, send them back to the login form.
+    #   redirect_to '/login'
+    # end
     @user = User.new(user_params)
 
     if @user.save

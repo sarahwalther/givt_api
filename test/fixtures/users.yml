@@ -1,11 +1,13 @@
 # Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
 one:
-  first_name: MyString
-  last_name: MyString
-  email: MyString
+  first_name: "Sarah"
+  last_name: "McAlear"
+  email: "sarah@mcalear.com"
+  api_key: "1234"
 
 two:
-  first_name: MyString
-  last_name: MyString
-  email: MyString
+  first_name: "Kevin"
+  last_name: "McAlear"
+  email: "kevin@mcalear.com"
+  api_key: "5678"
