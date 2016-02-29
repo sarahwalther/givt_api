@@ -1,14 +1,28 @@
 # Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
-one:
+user:
+  first_name: "User"
+  last_name: "Dude"
+  email: "user@dude.com"
+  api_key: "0123"
+
+manager:
   first_name: "Sarah"
   last_name: "McAlear"
-  type: "Customer"
+  type: "RestaurantManager"
   email: "sarah@mcalear.com"
   api_key: "1234"
 
-two:
+employee:
   first_name: "Kevin"
   last_name: "McAlear"
+  type: "RestaurantEmployee"
   email: "kevin@mcalear.com"
   api_key: "5678"
+
+customer:
+  first_name: "Customer"
+  last_name: "Dude"
+  type: "Customer"
+  email: "customer@dude.com"
+  api_key: "91011"

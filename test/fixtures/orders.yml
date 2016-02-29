@@ -2,10 +2,10 @@
 
 one:
   pick_up_name: MyString
-  customer: one
+  customer: customer
   menu_item: one
 
 two:
   pick_up_name: MyString
-  customer: two
+  customer: customer
   menu_item: two
