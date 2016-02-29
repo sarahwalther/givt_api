@@ -1,0 +1,3 @@
+class RestaurantManager < User
+
+end

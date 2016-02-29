@@ -1,0 +1,11 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  pick_up_name: MyString
+  customer: one
+  menu_item: one
+
+two:
+  pick_up_name: MyString
+  customer: two
+  menu_item: two

@@ -3,6 +3,7 @@
 one:
   first_name: "Sarah"
   last_name: "McAlear"
+  type: "Customer"
   email: "sarah@mcalear.com"
   api_key: "1234"
 
