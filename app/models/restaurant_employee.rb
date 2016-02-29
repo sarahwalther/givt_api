@@ -1,0 +1,3 @@
+class RestaurantEmployee < User
+
+end
