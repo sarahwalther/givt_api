@@ -5,8 +5,11 @@ class RestaurantsController < ApplicationController
   # GET /restaurants
   def index
     @restaurants = Restaurant.all
-
-    render json: @restaurants
+    if auth_user.type == "RestaurantManager"
+      render json: auth_user.restaurants
+    else
+      render json: @restaurants
+    end
   end
 
   # GET /restaurants/1
@@ -47,6 +50,16 @@ class RestaurantsController < ApplicationController
 
     # Only allow a trusted parameter "white list" through.
     def restaurant_params
-      params.require(:restaurant).permit(:name, :description, :latitude, :longitude, :street_address, :city, :zipcode, :phone_number)
+      params.require(:restaurant).permit(
+        :name,
+        :description,
+        :latitude,
+        :longitude,
+        :street_address,
+        :city,
+        :zipcode,
+        :phone_number,
+        :user_id
+      )
     end
 end

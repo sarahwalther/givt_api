@@ -13,6 +13,13 @@ manager:
   email: "sarah@mcalear.com"
   api_key: "1234"
 
+manager2:
+  first_name: "Sarah2"
+  last_name: "McAlear2"
+  type: "RestaurantManager"
+  email: "sarah2@mcalear.com"
+  api_key: "12342"
+
 employee:
   first_name: "Kevin"
   last_name: "McAlear"
