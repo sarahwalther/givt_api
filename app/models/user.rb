@@ -1,12 +1,13 @@
 class User < ApplicationRecord
   before_create :set_initial_api_key
-  # has_secure_password
-  # EMAIL_REGEX = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i
+
+  has_secure_password # http://api.rubyonrails.org/classes/ActiveModel/SecurePassword/ClassMethods.html
+
   validates_presence_of :first_name, :last_name, :email
+  validates_presence_of :password, if: :password
   validates_uniqueness_of :email
-  # attr_accessor :password
-  # validates :password, :confirmation => true #password_confirmation attr
-  # validates_length_of :password, :in => 6..20, :on => :create
+  validates_confirmation_of :password
+  validates_length_of :password, :in => 6..20, :on => :create
 
   private
 

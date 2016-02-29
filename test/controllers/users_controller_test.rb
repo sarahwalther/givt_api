@@ -3,6 +3,12 @@ require 'test_helper'
 class UsersControllerTest < ActionDispatch::IntegrationTest
   setup do
     @user = users(:user)
+    @user2 = User.create(
+      first_name: "user2",
+      last_name: "user2",
+      email: "user2@gmail.com",
+      password: "hihihihi"
+    )
   end
 
   test "should deny access without proper authentication" do
@@ -19,6 +25,11 @@ class UsersControllerTest < ActionDispatch::IntegrationTest
     assert_response 401
   end
 
+  test "should be able to login" do
+    post login_users_url, params: { email: @user2.email, password: @user2.password }
+    assert_response :success
+  end
+
   test "should get index" do
     get users_url, {
       headers: api_key(@user)
@@ -30,10 +41,12 @@ class UsersControllerTest < ActionDispatch::IntegrationTest
     new_user = User.new({
       first_name:"test",
       last_name: "test",
-      email: "test@test.com"
+      email: "test@test.com",
+      password: "test123",
+      password_confirmation: "test123"
     })
     assert_difference('User.count') do
-      post users_url, params: user_params(new_user)
+      post users_url, params: new_user_params(new_user)
     end
 
     assert_response 201
@@ -43,9 +56,10 @@ class UsersControllerTest < ActionDispatch::IntegrationTest
     current_user_count = User.count
     new_user = User.new({
       first_name:"test",
-      email: "test@test2.com"
+      email: "test@test2.com",
+      password: "test123"
     })
-    post users_url, params: user_params(new_user)
+    post users_url, params: new_user_params(new_user)
 
     assert_equal current_user_count, User.count
     assert_response 422
@@ -77,6 +91,17 @@ class UsersControllerTest < ActionDispatch::IntegrationTest
         email: user.email,
         first_name: user.first_name,
         last_name: user.last_name
+      }
+    }
+  end
+
+  def new_user_params(user)
+    {
+      user: {
+        email: user.email,
+        first_name: user.first_name,
+        last_name: user.last_name,
+        password: user.password
       }
     }
   end

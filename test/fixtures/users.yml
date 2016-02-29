@@ -5,6 +5,7 @@ user:
   last_name: "Dude"
   email: "user@dude.com"
   api_key: "0123"
+  password_digest: "blahdfajshdf"
 
 manager:
   first_name: "Sarah"
@@ -12,6 +13,7 @@ manager:
   type: "RestaurantManager"
   email: "sarah@mcalear.com"
   api_key: "1234"
+  password_digest: "aasdfadsf"
 
 manager2:
   first_name: "Sarah2"
@@ -19,6 +21,7 @@ manager2:
   type: "RestaurantManager"
   email: "sarah2@mcalear.com"
   api_key: "12342"
+  password_digest: "hgfbsergvaervg"
 
 employee:
   first_name: "Kevin"
@@ -26,6 +29,7 @@ employee:
   type: "RestaurantEmployee"
   email: "kevin@mcalear.com"
   api_key: "5678"
+  password_digest: "sgrvesrafaef"
 
 customer:
   first_name: "Customer"
@@ -33,3 +37,4 @@ customer:
   type: "Customer"
   email: "customer@dude.com"
   api_key: "91011"
+  password_digest: "aefaegserhsr"

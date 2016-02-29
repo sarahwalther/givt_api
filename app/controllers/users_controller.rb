@@ -1,6 +1,6 @@
 class UsersController < ApplicationController
   before_action :set_user, only: [:show, :update, :destroy]
-  before_action :authenticate, except: [:create]
+  before_action :authenticate, except: [:create, :login]
 
   # GET /users
   def index
@@ -14,19 +14,18 @@ class UsersController < ApplicationController
     render json: @user
   end
 
+  # POST /users/login
+  def login
+    @user = User.find_by_email(params[:email]).try(:authenticate, params[:password])
+    if @user
+      render json: @user
+    else
+      render json: 'Wrong email and/or password.', status: 401
+    end
+  end
+
   # POST /users
   def create
-    # user = User.find_by_email(params[:email])
-    # # If the user exists AND the password entered is correct.
-    # if user && user.authenticate(params[:password])
-    #   # Save the user id inside the browser cookie. This is how we keep the user
-    #   # logged in when they navigate around our website.
-    #   session[:user_id] = user.id
-    #   redirect_to '/'
-    # else
-    # # If user's login doesn't work, send them back to the login form.
-    #   redirect_to '/login'
-    # end
     @user = User.new(user_params)
 
     if @user.save
@@ -58,6 +57,12 @@ class UsersController < ApplicationController
 
     # Only allow a trusted parameter "white list" through.
     def user_params
-      params.require(:user).permit(:first_name, :last_name, :email)
+      params.require(:user).permit(
+        :first_name,
+        :last_name,
+        :email,
+        :password,
+        :password_confirmation
+      )
     end
 end
