@@ -1,6 +1,7 @@
 class UsersController < ApplicationController
   before_action :set_user, only: [:show, :update, :destroy]
   before_action :authenticate, except: [:create, :login]
+  before_action :authenticate_admin, only: [:index]
 
   # GET /users
   def index
@@ -62,7 +63,8 @@ class UsersController < ApplicationController
         :last_name,
         :email,
         :password,
-        :password_confirmation
+        :password_confirmation,
+        :type
       )
     end
 end

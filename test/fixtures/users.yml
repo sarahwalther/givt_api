@@ -3,6 +3,7 @@
 user:
   first_name: "User"
   last_name: "Dude"
+  type: "Admin"
   email: "user@dude.com"
   api_key: "0123"
   password_digest: "blahdfajshdf"

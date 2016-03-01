@@ -5,9 +5,10 @@ class User < ApplicationRecord
 
   validates_presence_of :first_name, :last_name, :email
   validates_presence_of :password, if: :password
+  validates_presence_of :type, on: :create
   validates_uniqueness_of :email
   validates_confirmation_of :password
-  validates_length_of :password, :in => 6..20, :on => :create
+  validates_length_of :password, in: 6..20, on: :create
 
   private
 

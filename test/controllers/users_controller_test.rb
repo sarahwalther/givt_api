@@ -3,9 +3,11 @@ require 'test_helper'
 class UsersControllerTest < ActionDispatch::IntegrationTest
   setup do
     @user = users(:user)
+    @customer = users(:customer)
     @user2 = User.create(
       first_name: "user2",
       last_name: "user2",
+      type: "RestaurantManager",
       email: "user2@gmail.com",
       password: "hihihihi"
     )
@@ -25,15 +27,18 @@ class UsersControllerTest < ActionDispatch::IntegrationTest
     assert_response 401
   end
 
+  test "should deny access to users index unless type admin" do
+    get users_url, headers: api_key(@user2)
+    assert_response 401
+  end
+
   test "should be able to login" do
     post login_users_url, params: { email: @user2.email, password: @user2.password }
     assert_response :success
   end
 
   test "should get index" do
-    get users_url, {
-      headers: api_key(@user)
-    }
+    get users_url, headers: api_key(@user)
     assert_response :success
   end
 
@@ -41,6 +46,7 @@ class UsersControllerTest < ActionDispatch::IntegrationTest
     new_user = User.new({
       first_name:"test",
       last_name: "test",
+      type: "Customer",
       email: "test@test.com",
       password: "test123",
       password_confirmation: "test123"
@@ -101,7 +107,8 @@ class UsersControllerTest < ActionDispatch::IntegrationTest
         email: user.email,
         first_name: user.first_name,
         last_name: user.last_name,
-        password: user.password
+        password: user.password,
+        type: user.type
       }
     }
   end
