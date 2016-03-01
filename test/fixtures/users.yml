@@ -1,6 +1,6 @@
 # Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
-user:
+admin:
   first_name: "User"
   last_name: "Dude"
   type: "Admin"

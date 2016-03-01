@@ -12,7 +12,11 @@ class UsersController < ApplicationController
 
   # GET /users/1
   def show
-    render json: @user
+    if @user == auth_user || auth_user.type == "Admin"
+      render json: @user
+    else
+      render_unauthorized
+    end
   end
 
   # POST /users/login

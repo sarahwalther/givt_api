@@ -2,9 +2,9 @@ require 'test_helper'
 
 class UsersControllerTest < ActionDispatch::IntegrationTest
   setup do
-    @user = users(:user)
+    @admin = users(:admin)
     @customer = users(:customer)
-    @user2 = User.create(
+    @customer2 = User.create(
       first_name: "user2",
       last_name: "user2",
       type: "RestaurantManager",
@@ -17,28 +17,36 @@ class UsersControllerTest < ActionDispatch::IntegrationTest
     get users_url
     assert_response 401
 
-    get user_url(@user)
+    get user_url(@admin)
     assert_response 401
 
-    patch user_url(@user), params: user_params(@user)
+    patch user_url(@admin), params: user_params(@admin)
     assert_response 401
 
-    delete user_url(@user)
+    delete user_url(@admin)
     assert_response 401
   end
 
   test "should deny access to users index unless type admin" do
-    get users_url, headers: api_key(@user2)
+    get users_url, headers: api_key(@customer2)
     assert_response 401
   end
 
+  test "should deny access to other user's show page unless type admin" do
+    get user_url(@admin), headers: api_key(@customer2)
+    assert_response 401
+
+    get user_url(@customer2), headers: api_key(@admin)
+    assert_response :success
+  end
+
   test "should be able to login" do
-    post login_users_url, params: { email: @user2.email, password: @user2.password }
+    post login_users_url, params: { email: @customer2.email, password: @customer2.password }
     assert_response :success
   end
 
   test "should get index" do
-    get users_url, headers: api_key(@user)
+    get users_url, headers: api_key(@admin)
     assert_response :success
   end
 
@@ -72,18 +80,18 @@ class UsersControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "should show user" do
-    get user_url(@user), headers: api_key(@user)
+    get user_url(@admin), headers: api_key(@admin)
     assert_response :success
   end
 
   test "should update user" do
-    patch user_url(@user), params: user_params(@user), headers: api_key(@user)
+    patch user_url(@admin), params: user_params(@admin), headers: api_key(@admin)
     assert_response 200
   end
 
   test "should destroy user" do
     assert_difference('User.count', -1) do
-      delete user_url(@user), headers: api_key(@user)
+      delete user_url(@admin), headers: api_key(@admin)
     end
 
     assert_response 204
