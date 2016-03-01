@@ -32,11 +32,19 @@ class UsersControllerTest < ActionDispatch::IntegrationTest
     assert_response 401
   end
 
-  test "should deny access to other user's show page unless type admin" do
+  test "should deny access to other user's show unless type admin" do
     get user_url(@admin), headers: api_key(@customer2)
     assert_response 401
 
     get user_url(@customer2), headers: api_key(@admin)
+    assert_response :success
+  end
+
+  test "should deny access to other user's update unless type admin" do
+    patch user_url(@admin), params: user_params(@admin), headers: api_key(@customer2)
+    assert_response 401
+
+    patch user_url(@customer2), params: user_params(@customer2), headers: api_key(@admin)
     assert_response :success
   end
 
