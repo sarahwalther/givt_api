@@ -48,6 +48,16 @@ class UsersControllerTest < ActionDispatch::IntegrationTest
     assert_response :success
   end
 
+  test "should deny access to other user's delete unless type admin" do
+    delete user_url(@admin), headers: api_key(@customer2)
+    assert_response 401
+
+    assert_difference('User.count', -1) do
+      delete user_url(@customer2), headers: api_key(@admin)
+    end
+    assert_response 204
+  end
+
   test "should be able to login" do
     post login_users_url, params: { email: @customer2.email, password: @customer2.password }
     assert_response :success

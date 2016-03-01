@@ -55,7 +55,11 @@ class UsersController < ApplicationController
 
   # DELETE /users/1
   def destroy
-    @user.destroy
+    if @user == auth_user || auth_user.type == "Admin"
+      @user.destroy
+    else
+      render_unauthorized
+    end
   end
 
   private
