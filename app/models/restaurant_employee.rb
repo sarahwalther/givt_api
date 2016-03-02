@@ -1,3 +1,0 @@
-class RestaurantEmployee < User
-
-end

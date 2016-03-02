@@ -5,7 +5,7 @@ class RestaurantsController < ApplicationController
   # GET /restaurants
   def index
     @restaurants = Restaurant.all
-    if auth_user.type == "RestaurantManager"
+    if auth_user.type == "Manager"
       render json: auth_user.restaurants
     else
       render json: @restaurants

@@ -7,7 +7,7 @@ class UsersControllerTest < ActionDispatch::IntegrationTest
     @customer2 = User.create(
       first_name: "user2",
       last_name: "user2",
-      type: "RestaurantManager",
+      type: "Manager",
       email: "user2@gmail.com",
       password: "hihihihi"
     )

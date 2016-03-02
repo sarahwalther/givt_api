@@ -11,7 +11,7 @@ admin:
 manager:
   first_name: "Sarah"
   last_name: "McAlear"
-  type: "RestaurantManager"
+  type: "Manager"
   email: "sarah@mcalear.com"
   api_key: "1234"
   password_digest: "aasdfadsf"
@@ -19,7 +19,7 @@ manager:
 manager2:
   first_name: "Sarah2"
   last_name: "McAlear2"
-  type: "RestaurantManager"
+  type: "Manager"
   email: "sarah2@mcalear.com"
   api_key: "12342"
   password_digest: "hgfbsergvaervg"
@@ -27,7 +27,7 @@ manager2:
 employee:
   first_name: "Kevin"
   last_name: "McAlear"
-  type: "RestaurantEmployee"
+  type: "Employee"
   email: "kevin@mcalear.com"
   api_key: "5678"
   password_digest: "sgrvesrafaef"
