@@ -30,6 +30,9 @@ class ManagersControllerTest < ActionDispatch::IntegrationTest
   test "should deny access to managers index unless type admin" do
     get managers_url, headers: api_key(@manager)
     assert_response 401
+
+    get managers_url, headers: api_key(@admin)
+    assert_response :success
   end
 
   test "should deny access to other manager's show unless type admin" do
@@ -66,6 +69,11 @@ class ManagersControllerTest < ActionDispatch::IntegrationTest
   test "should update manager" do
     patch manager_url(@manager), params: manager_params(@manager), headers: api_key(@manager)
     assert_response 200
+  end
+
+  test "should fail update manager if there is bad manager input" do
+    patch manager_url(@manager), params: manager_params(@customer), headers: api_key(@manager)
+    assert_response 422
   end
 
   test "should destroy manager" do
