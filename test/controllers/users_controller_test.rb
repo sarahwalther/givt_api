@@ -63,6 +63,11 @@ class UsersControllerTest < ActionDispatch::IntegrationTest
     assert_response :success
   end
 
+  test "should deny access with bad credentials to login" do
+    post login_users_url, params: { email: @customer2.email, password: @customer.password }
+    assert_response 401
+  end
+
   test "should get index" do
     get users_url, headers: api_key(@admin)
     assert_response :success
@@ -105,6 +110,11 @@ class UsersControllerTest < ActionDispatch::IntegrationTest
   test "should update user" do
     patch user_url(@admin), params: user_params(@admin), headers: api_key(@admin)
     assert_response 200
+  end
+
+  test "should fail update user if there is bad user input" do
+    patch user_url(@admin), params: user_params(@customer2), headers: api_key(@admin)
+    assert_response 422
   end
 
   test "should destroy user" do
