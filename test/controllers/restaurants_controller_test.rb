@@ -6,6 +6,7 @@ class RestaurantsControllerTest < ActionDispatch::IntegrationTest
     @manager = users(:manager)
     @employee = users(:employee)
     @customer = users(:customer)
+    @admin = users(:admin)
   end
 
   test "should deny access without proper authentication" do
@@ -37,15 +38,32 @@ class RestaurantsControllerTest < ActionDispatch::IntegrationTest
 
   test "should create restaurant" do
     assert_difference('Restaurant.count') do
-      post restaurants_url, { params: restaurant_params(@restaurant, @manager) , headers: api_key(@customer) }
+      post restaurants_url, { params: restaurant_params(@restaurant, @manager) , headers: api_key(@manager) }
     end
-
     assert_response 201
   end
+
+  test "only admins and managers should create restaurant" do
+    assert_difference('Restaurant.count') do
+      post restaurants_url, { params: restaurant_params(@restaurant, @manager) , headers: api_key(@admin) }
+    end
+    assert_response 201
+
+    assert_difference('Restaurant.count') do
+      post restaurants_url, { params: restaurant_params(@restaurant, @manager) , headers: api_key(@manager) }
+    end
+    assert_response 201
+
+    post restaurants_url, { params: restaurant_params(@restaurant, @manager) , headers: api_key(@customer) }
+    assert_response 401
+
+    post restaurants_url, { params: restaurant_params(@restaurant, @manager) , headers: api_key(@employee) }
+    assert_response 401
+  end
+
   test "should fail on incomplete create restaurant" do
     current_restaurant_count = Restaurant.count
-    post restaurants_url, params: { restaurant: { name:"test" } }, headers: api_key(@customer)
-
+    post restaurants_url, params: { restaurant: { name:"test" } }, headers: api_key(@admin)
     assert_equal current_restaurant_count, Restaurant.count
     assert_response 422
   end

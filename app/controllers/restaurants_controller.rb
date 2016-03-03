@@ -19,12 +19,16 @@ class RestaurantsController < ApplicationController
 
   # POST /restaurants
   def create
-    @restaurant = Restaurant.new(restaurant_params)
+    if auth_user.type == "Manager" || auth_user.type == "Admin"
+      @restaurant = Restaurant.new(restaurant_params)
 
-    if @restaurant.save
-      render json: @restaurant, status: :created, location: @restaurant
+      if @restaurant.save
+        render json: @restaurant, status: :created, location: @restaurant
+      else
+        render json: @restaurant.errors, status: :unprocessable_entity
+      end
     else
-      render json: @restaurant.errors, status: :unprocessable_entity
+      render_unauthorized
     end
   end
 
