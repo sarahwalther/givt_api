@@ -42,6 +42,13 @@ class RestaurantsControllerTest < ActionDispatch::IntegrationTest
 
     assert_response 201
   end
+  test "should fail on incomplete create restaurant" do
+    current_restaurant_count = Restaurant.count
+    post restaurants_url, params: { restaurant: { name:"test" } }, headers: api_key(@customer)
+
+    assert_equal current_restaurant_count, Restaurant.count
+    assert_response 422
+  end
 
   test "should show restaurant" do
     get restaurant_url(@restaurant), headers: api_key(@customer)
@@ -51,6 +58,11 @@ class RestaurantsControllerTest < ActionDispatch::IntegrationTest
   test "should update restaurant" do
     patch restaurant_url(@restaurant), { params: restaurant_params(@restaurant, @manager) , headers: api_key(@manager) }
     assert_response 200
+  end
+
+  test "should fail update restaurant if there is bad user restaurant" do
+    patch restaurant_url(@restaurant), params: { restaurant: { user_id: "32jrawfa" } }, headers: api_key(@manager)
+    assert_response 422
   end
 
   test "should destroy restaurant" do

@@ -95,16 +95,4 @@ class ManagersControllerTest < ActionDispatch::IntegrationTest
       }
     }
   end
-
-  def new_manager_params(manager)
-    {
-      manager: {
-        email: manager.email,
-        first_name: manager.first_name,
-        last_name: manager.last_name,
-        password: manager.password,
-        type: manager.type
-      }
-    }
-  end
 end
