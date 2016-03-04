@@ -2,7 +2,8 @@ Rails.application.routes.draw do
   resources :orders
   resources :menu_items
   resources :restaurants
-  resources :users do
+  resources :admins, type: "User", only: []
+  resources :users, only: [:create] do
     post 'login', on: :collection
   end
   resources :customers

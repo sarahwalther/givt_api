@@ -1,23 +1,4 @@
 class UsersController < ApplicationController
-  before_action :set_user, only: [:show, :update, :destroy]
-  before_action :authenticate, except: [:create, :login]
-  before_action :authenticate_admin, only: [:index]
-
-  # GET /users
-  def index
-    @users = User.all
-
-    render json: @users
-  end
-
-  # GET /users/1
-  def show
-    if @user == auth_user || auth_user.type == "Admin"
-      render json: @user
-    else
-      render_unauthorized
-    end
-  end
 
   # POST /users/login
   def login
@@ -33,40 +14,14 @@ class UsersController < ApplicationController
   def create
     @user = User.new(user_params)
 
-    if @user.save
+    if @user.type != "Admin" && @user.save
       render json: @user, status: :created, location: @user
     else
       render json: @user.errors, status: :unprocessable_entity
     end
   end
 
-  # PATCH/PUT /users/1
-  def update
-    if @user == auth_user || auth_user.type == "Admin"
-      if @user.update(user_params)
-        render json: @user
-      else
-        render json: @user.errors, status: :unprocessable_entity
-      end
-    else
-      render_unauthorized
-    end
-  end
-
-  # DELETE /users/1
-  def destroy
-    if @user == auth_user || auth_user.type == "Admin"
-      @user.destroy
-    else
-      render_unauthorized
-    end
-  end
-
   private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_user
-      @user = User.find(params[:id])
-    end
 
     # Only allow a trusted parameter "white list" through.
     def user_params
