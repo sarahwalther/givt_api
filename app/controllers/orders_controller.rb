@@ -1,19 +1,25 @@
 class OrdersController < ApplicationController
   before_action :set_order, only: [:show, :update, :destroy]
 
-  # GET /orders
+  # GET restaurant/:restaurant_id/orders
+  # GET customers/:customer_id/orders
   def index
-    @orders = Order.all
-
+    if params[:customer_id]
+      @orders = Customer.find(params[:customer_id]).orders
+    elsif params[:restaurant_id]
+      @orders = Restaurant.find(params[:restaurant_id]).orders
+    end
     render json: @orders
   end
 
-  # GET /orders/1
+  # GET restaurant/:restaurant_id/orders/1
+  # GET customers/:customer_id/orders/1
   def show
     render json: @order
   end
 
-  # POST /orders
+  # POST restaurant/:restaurant_id/orders
+  # POST customers/:customer_id/orders
   def create
     @order = Order.new(order_params)
     if @order.save
@@ -23,7 +29,8 @@ class OrdersController < ApplicationController
     end
   end
 
-  # PATCH/PUT /orders/1
+  # PATCH/PUT restaurant/:restaurant_id/orders/1
+  # PATCH/PUT customers/:customer_id/orders/1
   def update
     if @order.update(order_params)
       render json: @order
@@ -32,7 +39,8 @@ class OrdersController < ApplicationController
     end
   end
 
-  # DELETE /orders/1
+  # DELETE restaurant/:restaurant_id/orders/1
+  # DELETE customers/:customer_id/orders/1
   def destroy
     @order.destroy
   end
@@ -43,8 +51,12 @@ class OrdersController < ApplicationController
       @order = Order.find(params[:id])
     end
 
-    def set_user
-      @customer = Customer.find(params[:user_id])
+    def set_customer
+      @customer = Customer.find(params[:customer_id])
+    end
+
+    def set_restaurant
+      @customer = Customer.find(params[:restaurant_id])
     end
 
     # Only allow a trusted parameter "white list" through.

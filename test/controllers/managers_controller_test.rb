@@ -14,9 +14,6 @@ class ManagersControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "should deny access without proper authentication" do
-    get managers_url
-    assert_response 401
-
     get manager_url(@manager)
     assert_response 401
 

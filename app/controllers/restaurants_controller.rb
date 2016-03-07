@@ -3,6 +3,7 @@ class RestaurantsController < ApplicationController
   before_action :authenticate
 
   # GET /restaurants
+  # GET /managers/:manager_id/restaurants
   def index
     @restaurants = Restaurant.all
     if auth_user.type == "Manager"
@@ -13,11 +14,13 @@ class RestaurantsController < ApplicationController
   end
 
   # GET /restaurants/1
+  # GET /managers/:manager_id/restaurants/1
   def show
     render json: @restaurant
   end
 
   # POST /restaurants
+  # POST /managers/:manager_id/restaurants
   def create
     if auth_user.type == "Manager" || auth_user.type == "Admin"
       @restaurant = Restaurant.new(restaurant_params)
@@ -33,6 +36,7 @@ class RestaurantsController < ApplicationController
   end
 
   # PATCH/PUT /restaurants/1
+  # PATCH/PUT /managers/:manager_id/restaurants/1
   def update
     if @restaurant.update(restaurant_params)
       render json: @restaurant
@@ -42,6 +46,7 @@ class RestaurantsController < ApplicationController
   end
 
   # DELETE /restaurants/1
+  # DELETE /managers/:manager_id/restaurants/1
   def destroy
     @restaurant.destroy
   end
