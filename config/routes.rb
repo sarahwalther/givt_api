@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  resources :admins, type: "User", only: []
   resources :users, only: :create do
     post 'login', on: :collection
   end

@@ -1,42 +1,40 @@
 class RestaurantsController < ApplicationController
+  before_action :authenticate, :set_manager
   before_action :set_restaurant, only: [:show, :update, :destroy]
-  before_action :authenticate
+  before_action -> { authorize @manager }, except: [:index, :show]
+  before_action only: [:index, :show] do
+    render_unauthorized if @manager && @manager != auth_user
+  end
 
-  # GET /restaurants
-  # GET /managers/:manager_id/restaurants
   def index
-    @restaurants = Restaurant.all
-    if auth_user.type == "Manager"
-      render json: auth_user.restaurants
-    else
-      render json: @restaurants
+    if @manager
+      @restaurants = @manager.restaurants
+    elsif auth_user.customer? || auth_user.admin?
+      @restaurants = Restaurant.all
     end
+    render json: @restaurants
   end
 
-  # GET /restaurants/1
-  # GET /managers/:manager_id/restaurants/1
   def show
-    render json: @restaurant
-  end
-
-  # POST /restaurants
-  # POST /managers/:manager_id/restaurants
-  def create
-    if auth_user.type == "Manager" || auth_user.type == "Admin"
-      @restaurant = Restaurant.new(restaurant_params)
-
-      if @restaurant.save
-        render json: @restaurant, status: :created, location: @restaurant
-      else
-        render json: @restaurant.errors, status: :unprocessable_entity
-      end
+    if @manager == @restaurant.manager
+      render json: @restaurant
+    elsif auth_user.customer? || auth_user.admin?
+      render json: @restaurant
     else
       render_unauthorized
     end
   end
 
-  # PATCH/PUT /restaurants/1
-  # PATCH/PUT /managers/:manager_id/restaurants/1
+  def create
+    @restaurant = Restaurant.new(restaurant_params)
+
+    if @restaurant.save
+      render json: @restaurant, status: :created, location: @restaurant
+    else
+      render json: @restaurant.errors, status: :unprocessable_entity
+    end
+  end
+
   def update
     if @restaurant.update(restaurant_params)
       render json: @restaurant
@@ -45,14 +43,15 @@ class RestaurantsController < ApplicationController
     end
   end
 
-  # DELETE /restaurants/1
-  # DELETE /managers/:manager_id/restaurants/1
   def destroy
     @restaurant.destroy
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
+    def set_manager
+      @manager = Manager.find(params[:manager_id]) if params[:manager_id]
+    end
+
     def set_restaurant
       @restaurant = Restaurant.find(params[:id])
     end

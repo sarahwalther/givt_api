@@ -10,12 +10,15 @@ class CustomersControllerTest < ActionDispatch::IntegrationTest
       email: "customer2@gmail.com",
       password: "hihihihi"
     )
+    @order = orders(:one)
+    @new_order = Order.new(
+      pick_up_name: "test",
+      user_id: "test",
+      menu_item_id: "test"
+    )
   end
 
   test "should deny access without proper authentication" do
-    get customers_url
-    assert_response 401
-
     get customer_url(@customer)
     assert_response 401
 
@@ -24,10 +27,14 @@ class CustomersControllerTest < ActionDispatch::IntegrationTest
 
     delete customer_url(@customer)
     assert_response 401
-  end
 
-  test "should deny access to customers index unless type admin" do
-    get customers_url, headers: api_key(@customer2)
+    get customer_orders_url(@customer)
+    assert_response 401
+
+    post customer_orders_url(@customer), params: new_order_params(@new_order)
+    assert_response 401
+
+    get customer_order_url(@customer, @order)
     assert_response 401
   end
 
@@ -57,11 +64,6 @@ class CustomersControllerTest < ActionDispatch::IntegrationTest
     assert_response 204
   end
 
-  test "should get index" do
-    get customers_url, headers: api_key(@admin)
-    assert_response :success
-  end
-
   test "should show customer" do
     get customer_url(@customer), headers: api_key(@customer)
     assert_response :success
@@ -84,6 +86,48 @@ class CustomersControllerTest < ActionDispatch::IntegrationTest
     assert_response 204
   end
 
+  test "a customer should be able to create orders" do
+    post customer_orders_url(@customer), headers: api_key(@customer), params: new_order_params(@new_order)
+  end
+
+  test "should fail creating a customer's order if there is bad input" do
+    post customer_orders_url(@customer), headers: api_key(@customer), params: {order: {pick_up_name: 9842039482} }
+    assert_response 422
+  end
+
+  test "should deny access to other customers' create orders unless type admin" do
+    customer_order_count = @customer.orders.count
+    post customer_orders_url(@customer), headers: api_key(@customer2), params: new_order_params(@new_order)
+    assert_equal customer_order_count, @customer.orders.count
+    assert_response 401
+  end
+
+  test "should be able to see all of a specific customer's orders" do
+    get customer_orders_url(@customer), headers: api_key(@customer)
+    assert_response :success
+  end
+
+  test "should deny access to other customers' orders unless type admin" do
+    get customer_orders_url(@customer), headers: api_key(@admin)
+    assert_response :success
+
+    get customer_orders_url(@customer), headers: api_key(@customer2)
+    assert_response 401
+  end
+
+  test "a customer should be able to see a specific order" do
+    get customer_order_url(@customer, @order), headers: api_key(@customer)
+    assert_response :success
+  end
+
+  test "should deny access to a single customers' order unless type admin" do
+    get customer_order_url(@customer, @order), headers: api_key(@admin)
+    assert_response :success
+
+    get customer_order_url(@customer, @order), headers: api_key(@customer2)
+    assert_response 401
+  end
+
   private
 
   def customer_params(customer)
@@ -104,6 +148,16 @@ class CustomersControllerTest < ActionDispatch::IntegrationTest
         last_name: customer.last_name,
         password: customer.password,
         type: customer.type
+      }
+    }
+  end
+
+  def new_order_params(order)
+    {
+      order: {
+        pick_up_name: order.pick_up_name,
+        user_id: order.user_id,
+        menu_item_id: order.menu_item_id
       }
     }
   end

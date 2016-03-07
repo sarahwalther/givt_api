@@ -5,6 +5,10 @@ class ApplicationController < ActionController::API
 
   private
 
+    def authorize(user)
+      user == auth_user || auth_user.type == "Admin" || render_unauthorized
+    end
+
     def authenticate_admin
       authenticate_api_key && auth_user.type == "Admin" || render_unauthorized
     end

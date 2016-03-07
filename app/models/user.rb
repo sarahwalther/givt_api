@@ -10,6 +10,22 @@ class User < ApplicationRecord
   validates_confirmation_of :password
   validates_length_of :password, in: 6..20, on: :create
 
+  def admin?
+    type == "Admin"
+  end
+
+  def customer?
+    type == "Customer"
+  end
+
+  def manager?
+    type == "Manager"
+  end
+
+  def employee?
+    type == "Employee"
+  end
+
   private
 
   def set_initial_api_key

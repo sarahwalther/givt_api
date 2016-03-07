@@ -30,6 +30,7 @@ employee:
   type: "Employee"
   email: "kevin@mcalear.com"
   api_key: "5678"
+  restaurant: one
   password_digest: "sgrvesrafaef"
 
 customer:
