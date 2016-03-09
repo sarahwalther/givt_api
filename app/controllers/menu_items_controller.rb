@@ -2,19 +2,16 @@ class MenuItemsController < ApplicationController
   before_action :set_menu_item, only: [:show, :update, :destroy]
   before_action :authenticate
 
-  # GET /menu_items
   def index
     @menu_items = MenuItem.all
 
     render json: @menu_items
   end
 
-  # GET /menu_items/1
   def show
     render json: @menu_item
   end
 
-  # POST /menu_items
   def create
     @menu_item = MenuItem.new(menu_item_params)
 
@@ -25,7 +22,6 @@ class MenuItemsController < ApplicationController
     end
   end
 
-  # PATCH/PUT /menu_items/1
   def update
     if @menu_item.update(menu_item_params)
       render json: @menu_item
@@ -34,13 +30,12 @@ class MenuItemsController < ApplicationController
     end
   end
 
-  # DELETE /menu_items/1
   def destroy
     @menu_item.destroy
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
+
     def set_menu_item
       @menu_item = MenuItem.find(params[:id])
     end
