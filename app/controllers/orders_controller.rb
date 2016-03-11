@@ -42,7 +42,6 @@ class OrdersController < ApplicationController
       @customer = Customer.find(params[:restaurant_id]) if params[:restaurant_id]
     end
 
-    # Only allow a trusted parameter "white list" through.
     def order_params
       params.require(:order).permit(:pick_up_name, :user_id, :menu_item_id, :id)
     end

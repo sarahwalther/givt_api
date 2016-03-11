@@ -24,7 +24,6 @@ class ManagersController < ApplicationController
       @manager = Manager.find(params[:id])
     end
 
-    # Only allow a trusted parameter "white list" through.
     def manager_params
       params.require(:manager).permit(
         :first_name,

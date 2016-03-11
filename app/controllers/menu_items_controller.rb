@@ -40,7 +40,6 @@ class MenuItemsController < ApplicationController
       @menu_item = MenuItem.find(params[:id])
     end
 
-    # Only allow a trusted parameter "white list" through.
     def menu_item_params
       params.require(:menu_item).permit(:name, :description, :price, :image_url, :restaurant_id)
     end

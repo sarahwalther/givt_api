@@ -3,13 +3,11 @@ class EmployeesController < ApplicationController
   before_action :authenticate
   before_action :authenticate_admin, only: [:index]
 
-  # GET restaurant/:restaurant_id/employees
   def index
     @employees = Employee.all
     render json: @employees
   end
 
-  # GET restaurant/:restaurant_id/employees/1
   def show
     if @employee.api_key == auth_user.api_key || auth_user.type == "Admin"
       render json: @employee
@@ -18,7 +16,6 @@ class EmployeesController < ApplicationController
     end
   end
 
-  # PATCH/PUT restaurant/:restaurant_id/employees/1
   def update
     if @employee.api_key == auth_user.api_key || auth_user.type == "Admin"
       if @employee.update(employee_params)
@@ -31,7 +28,6 @@ class EmployeesController < ApplicationController
     end
   end
 
-  # DELETE restaurant/:restaurant_id/employees/1
   def destroy
     if @employee.api_key == auth_user.api_key || auth_user.type == "Admin"
       @employee.destroy
@@ -41,7 +37,7 @@ class EmployeesController < ApplicationController
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
+
     def set_user
       @employee = Employee.find(params[:id])
     end
@@ -49,7 +45,6 @@ class EmployeesController < ApplicationController
       @employee = Restaurant.find(params[:restaurant_id])
     end
 
-    # Only allow a trusted parameter "white list" through.
     def employee_params
       params.require(:employee).permit(
         :restaurant_id,

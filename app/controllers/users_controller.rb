@@ -1,6 +1,5 @@
 class UsersController < ApplicationController
 
-  # POST /users/login
   def login
     @user = User.find_by_email(params[:email]).try(:authenticate, params[:password])
     if @user
@@ -10,7 +9,6 @@ class UsersController < ApplicationController
     end
   end
 
-  # POST /users
   def create
     @user = User.new(user_params)
 
@@ -23,7 +21,6 @@ class UsersController < ApplicationController
 
   private
 
-    # Only allow a trusted parameter "white list" through.
     def user_params
       params.require(:user).permit(
         :first_name,
